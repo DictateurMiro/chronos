@@ -1,7 +1,7 @@
 ### <p align="center"> Chronos </p>
   
 -----
-<p align="center"><img src="https://64.media.tumblr.com/02921350fe0b561b1515fadcca56158a/4e8e148748f4035c-37/s540x810/337259a5844b265b302a23134b92919cdf1a080e.gifv"></p>
+<p align="center"><img src="https://64.media.tumblr.com/02921350fe0b561b1515fadcca56158a/4e8e148748f4035c-37/s540x810/337259a5844b265b302a23134b92919cdf1a080e.gif"></p>
 
 -----
 
