@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronos</title>
+	<link rel="icon" type="image/x-icon" href="images/chronos.jpg">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #c7d8ed, #f4f4f4);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #select_file {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+			
+        }
+
+		#search-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+        #search-bar {
+            margin-top: 20px;
+			margin-right: 10px;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #profile-pic {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+		
+		footer {
+			width: 100%;
+			color: black;
+			text-align: center;
+			padding: 20px 0px 10px 0px;
+			margin-bottom: 5px;
+			position: fixed;
+			left: 0px;
+			bottom: 0px;
+		}
+
+		footer a {
+			color: #3498db;
+			text-align: center;
+			text-decoration: none;
+		}
+		
+		.button-upload {
+			appearance: button;
+			backface-visibility: hidden;
+			background-color: #405cf5;
+			border-radius: 6px;
+			border-width: 0;
+			box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+			box-sizing: border-box;
+			color: #fff;
+			cursor: pointer;
+			font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+			font-size: 100%;
+			height: 40px;
+			line-height: 1.15;
+			margin: 12px 0 0;
+			outline: none;
+			overflow: hidden;
+			padding: 0 25px;
+			position: relative;
+			text-align: center;
+			text-transform: none;
+			transform: translateZ(0);
+			transition: all .2s,box-shadow .08s ease-in;
+			user-select: none;
+			-webkit-user-select: none;
+			touch-action: manipulation;
+			width: 30%;
+		}
+		
+		.button-search {
+			appearance: button;
+			backface-visibility: hidden;
+			background-color: #405cf5;
+			border-radius: 6px;
+			border-width: 0;
+			box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+			box-sizing: border-box;
+			color: #fff;
+			cursor: pointer;
+			font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+			font-size: 100%;
+			height: 40px;
+			line-height: 1.15;
+			margin: 20px 0 0;
+			outline: none;
+			overflow: hidden;
+			position: relative;
+			text-align: center;
+			text-transform: none;
+			transform: translateZ(0);
+			transition: all .2s,box-shadow .08s ease-in;
+			user-select: none;
+			-webkit-user-select: none;
+			touch-action: manipulation;
+			width: 30%;
+		}
+
+		.button-9:disabled {
+			cursor: default;
+		}
+
+		.button-9:focus {
+			box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+		}
+		
+		#file-label {
+			position: relative;
+			display: inline-block;
+			background: #3498db;
+			color: white;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		#file-label input[type="file"] {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		
+    </style>
+</head>
+<body>
+    <a href="https://github.com/DictateurMiro" target="_blank">
+        <img id="profile-pic" src="images/miro.jpg" alt="Image du profil">
+    </a>
+    <div id="container">
+        <h1>Chronos - Plateforme d'échange de fichiers en local</h1>
+		<label id="file-label" for="select_file">
+			<span id="file-button-text">Choisir un fichier ...</span>
+			<br>
+			<input disabled class="file_uploaded" type="text" name="file_sent" id="file_sent" placeholder="Aucun fichier séléctionné ...">
+			<input type="file" id="select_file">
+		</label>
+		<br>
+        <button class="button-upload" role="button" onclick="send()">Envoyé</button>
+		<div id="search-container">
+			<input type="text" id="search-bar" placeholder="Rechercher des fichiers...">
+			<button class="button-search" role="button" onclick="searchFile()">Recherché</button>
+		</div>
+		<footer>
+			<i>Developped with </i>💙️<i> by <a class="links" href="https://github.com/DictateurMiro">Miro</a></i>
+		</footer>
+	</div>
+</body>
+<script>
+document.getElementById("select_file").onchange = function() {
+    var filename = this.value.split('\\');
+    document.getElementById("file_sent").value = filename[filename.length - 1];
+};
+
+async function send() {
+    const file = document.getElementById("select_file").files[0];
+    if (file == null) {
+        alert("Veuillez sélectionner un fichier !");
+        return;
+    }
+
+    let formData = new FormData();
+    var myRequest = new Request('/upload?filename=' + file.name);
+    
+    formData.append("file", file);
+    await fetch(myRequest, { method: "POST", body: formData });
+
+    alert("Fichier envoyé : " + file.name);
+
+    setTimeout(() => { window.location.reload(); }, 1000);
+}
+
+
+function searchFile() {
+    var searchQuery = document.getElementById("search-bar").value;
+    if (searchQuery === "") {
+        alert("Veuillez entrez un nom de fichier à chercher");
+        return;
+    }
+    window.location.href = '/get/' + searchQuery;
+}          
+
+document.getElementById("select_file").addEventListener("change", function() {
+    var filename = this.value.split('\\').pop();
+    document.getElementById("file_sent").value = filename;
+
+    var messageElement = document.getElementById("message");
+    if (filename) {
+        messageElement.textContent = "Fichier sélectionné : " + filename;
+    } else {
+        messageElement.textContent = "Aucun fichier n'a été sélectionné";
+    }
+});
+
+
+</script>
+</html>
