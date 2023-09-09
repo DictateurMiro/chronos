@@ -275,7 +275,6 @@ function send() {
         return;
     }
 
-    // Afficher la barre de chargement
     document.getElementById("progress-container").style.display = "block";
 
     let formData = new FormData();
@@ -284,7 +283,6 @@ function send() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/upload?filename=" + file.name, true);
 
-    // Événement pour suivre la progression de l'envoi
 	xhr.upload.addEventListener("progress", function(event) {
 		if (event.lengthComputable) {
 			var percentComplete = Math.round((event.loaded / event.total) * 100);
@@ -293,8 +291,6 @@ function send() {
 		}
 	}, false);
 
-
-    // Événement pour gérer la fin de l'envoi
     xhr.addEventListener("load", function() {
         if (xhr.status === 200) {
             alert("Fichier envoyé : " + file.name);
@@ -303,7 +299,6 @@ function send() {
             alert("Erreur lors de l'envoi du fichier.");
         }
 
-        // Cacher la barre de chargement
         document.getElementById("progress-container").style.display = "none";
     });
 
