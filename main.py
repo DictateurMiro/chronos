@@ -1,9 +1,9 @@
-from flask import Flask, request, send_file, redirect
+from flask import Flask, request, send_file, redirect, jsonify
 from pystyle import Colorate, Colors, System, Center, Write, Anime
 from webbrowser import open_new as start
 from socket import gethostname, gethostbyname
 from os import listdir, chdir, name
-from os.path import isfile
+from os.path import isfile, getsize, join
 
 
 
@@ -77,8 +77,20 @@ def image_route(image):
     if isfile(imagename):
         return send_file(imagename, as_attachment=True)
     else:
-        return send_file('db/chronos.jpg', as_attachment=True)
+        return send_file('images/chronos.jpg', as_attachment=True)
 
+@app.route('/list-files', methods=['GET'])
+def list_files():
+    directory_path = 'database'  # Remplacez par le chemin réel vers votre dossier "database"
+    files = listdir(directory_path)
+    file_info = {}
+    
+    for file in files:
+        file_path = join(directory_path, file)
+        file_size = getsize(file_path)
+        file_info[file] = f"{file_size} bytes"
+        
+    return jsonify(file_info)
 
 
 System.Clear()
