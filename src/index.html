@@ -110,6 +110,35 @@
 			width: 30%;
 		}
 		
+		.button-list {
+			appearance: button;
+			backface-visibility: hidden;
+			background-color: #53D159;
+			border-radius: 6px;
+			border-width: 0;
+			box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+			box-sizing: border-box;
+			color: #fff;
+			cursor: pointer;
+			font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+			font-size: 100%;
+			height: 40px;
+			line-height: 1.15;
+			margin: 12px 0 0;
+			outline: none;
+			overflow: hidden;
+			padding: 0 25px;
+			position: relative;
+			text-align: center;
+			text-transform: none;
+			transform: translateZ(0);
+			transition: all .2s,box-shadow .08s ease-in;
+			user-select: none;
+			-webkit-user-select: none;
+			touch-action: manipulation;
+			width: 30%;
+		}
+		
 		.button-search {
 			appearance: button;
 			backface-visibility: hidden;
@@ -165,8 +194,25 @@
 			opacity: 0;
 			cursor: pointer;
 		}
-
 		
+		#progress-container {
+			display: none;
+			border-radius: 20px;
+			width: 90%;
+			margin-right: auto;
+			margin-left: auto;
+			background-color: #ccc;
+		}
+
+		#progress-bar {
+			width: 90%;
+			height: 30px;
+			border-radius: 20px;
+			background-color: #4CAF50;
+			text-align: center;
+			line-height: 30px;
+			color: white;
+		}		
     </style>
 </head>
 <body>
@@ -182,10 +228,20 @@
 			<input type="file" id="select_file">
 		</label>
 		<br>
-        <button class="button-upload" role="button" onclick="send()">Envoyé</button>
+        <button class="button-upload" role="button" onclick="send()">Envoyer</button>
+		<br>
+		<br>
+		<br>
+		<button class="button-list" role="button" onclick="listFiles()">Lister les fichiers</button>
 		<div id="search-container">
 			<input type="text" id="search-bar" placeholder="Rechercher des fichiers...">
-			<button class="button-search" role="button" onclick="searchFile()">Recherché</button>
+			<button class="button-search" role="button" onclick="searchFile()">Rechercher</button>
+		</div>
+		<br>
+		<div id="progress-container">
+			<div id="progress-bar">
+				<span id="progress-text"></span>
+			</div>
 		</div>
 		<footer>
 			<i>Developped with </i>💙️<i> by <a class="links" href="https://github.com/DictateurMiro">Miro</a></i>
@@ -198,22 +254,60 @@ document.getElementById("select_file").onchange = function() {
     document.getElementById("file_sent").value = filename[filename.length - 1];
 };
 
-async function send() {
+async function listFiles() {
+  const response = await fetch('/list-files');
+  const files = await response.json();
+
+  let fileList = '';
+  for (const [fileName, fileSize] of Object.entries(files)) {
+    fileList += `${fileName} - ${fileSize}\n`;
+  }
+
+  alert('Fichiers dans le dossier "database":\n' + fileList);
+}
+
+
+
+function send() {
     const file = document.getElementById("select_file").files[0];
     if (file == null) {
         alert("Veuillez sélectionner un fichier !");
         return;
     }
 
+    // Afficher la barre de chargement
+    document.getElementById("progress-container").style.display = "block";
+
     let formData = new FormData();
-    var myRequest = new Request('/upload?filename=' + file.name);
-    
     formData.append("file", file);
-    await fetch(myRequest, { method: "POST", body: formData });
 
-    alert("Fichier envoyé : " + file.name);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/upload?filename=" + file.name, true);
 
-    setTimeout(() => { window.location.reload(); }, 1000);
+    // Événement pour suivre la progression de l'envoi
+	xhr.upload.addEventListener("progress", function(event) {
+		if (event.lengthComputable) {
+			var percentComplete = Math.round((event.loaded / event.total) * 100);
+			document.getElementById("progress-bar").style.width = percentComplete + "%";
+			document.getElementById("progress-text").textContent = percentComplete + "%";
+		}
+	}, false);
+
+
+    // Événement pour gérer la fin de l'envoi
+    xhr.addEventListener("load", function() {
+        if (xhr.status === 200) {
+            alert("Fichier envoyé : " + file.name);
+            setTimeout(() => { window.location.reload(); }, 1000);
+        } else {
+            alert("Erreur lors de l'envoi du fichier.");
+        }
+
+        // Cacher la barre de chargement
+        document.getElementById("progress-container").style.display = "none";
+    });
+
+    xhr.send(formData);
 }
 
 
