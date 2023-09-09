@@ -5,6 +5,9 @@ from socket import gethostname, gethostbyname
 from os import listdir, chdir, name
 from os.path import isfile, getsize, join
 
+import psutil
+import math
+
 
 
 chronos = """
@@ -81,16 +84,45 @@ def image_route(image):
 
 @app.route('/list-files', methods=['GET'])
 def list_files():
-    directory_path = 'database'  # Remplacez par le chemin réel vers votre dossier "database"
+    directory_path = 'database'
     files = listdir(directory_path)
     file_info = {}
     
+    total_size = 0
     for file in files:
         file_path = join(directory_path, file)
         file_size = getsize(file_path)
-        file_info[file] = f"{file_size} bytes"
+        total_size += file_size
+        file_info[file] = convert_size(file_size)
+
         
-    return jsonify(file_info)
+    disk_info = psutil.disk_usage('/')
+    free_space = disk_info.free
+    total_space = disk_info.total
+    used_space = total_space - free_space
+    percent_used = (used_space / total_space) * 100
+    percent_no_used = 100 - percent_used
+    
+    total_space_gb = total_space / (1024 ** 3)
+    free_space_gb = free_space / (1024 ** 3)
+    
+    return jsonify({
+        'files': file_info,
+        'total_size': f"{total_space_gb:.2f} Go",
+        'free_space': f"{free_space_gb:.2f} Go",
+        'total_space': f"{total_space} octets",
+        'percent_used': f"{percent_used:.2f}%",
+        'percent_no_used': f"{percent_no_used:.2f}%"
+    })
+
+def convert_size(size_bytes):
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("octets", "Ko", "Mo", "Go", "To", "Po", "Eo", "Zo", "Yo")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+    return f"{s} {size_name[i]}"
 
 
 System.Clear()
