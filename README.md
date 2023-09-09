@@ -42,7 +42,14 @@ Source code of the file avaiable<br>
 * When the server is online 
 <br><br>
 <img src="https://i.imgur.com/2Hspgvv.png">
+<br><br>
+* Client Side
+<img src="https://i.imgur.com/3gnXeML.png">
   
+- "Liste les fichiers" : See the name of the files with their size
+- "Envoyer" : Upload
+- "Rechercher" : Search bar 
+
 -----
 
 ### <p align="center">📌 Disclaimer 📌</p><br>
