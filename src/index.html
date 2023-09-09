@@ -256,14 +256,14 @@ document.getElementById("select_file").onchange = function() {
 
 async function listFiles() {
   const response = await fetch('/list-files');
-  const files = await response.json();
+  const data = await response.json();
 
-  let fileList = '';
-  for (const [fileName, fileSize] of Object.entries(files)) {
+  let fileList = `Taille totale : ${data.total_size}\nEspace libre : ${data.free_space}\n\nPourcentage utilisé : ${data.percent_used}\nPourcentage non utilisé : ${data.percent_no_used}\n\nFichiers :\n`;
+  for (const [fileName, fileSize] of Object.entries(data.files)) {
     fileList += `${fileName} - ${fileSize}\n`;
   }
 
-  alert('Fichiers dans le dossier "database":\n' + fileList);
+  alert(fileList);
 }
 
 
