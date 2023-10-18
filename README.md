@@ -5,7 +5,7 @@
 
 -----
 
-### <p align="center">🖼️ Description 🖼️</p><br>e
+### <p align="center">🖼️ Description 🖼️</p><br>
 
 <center> 
   
