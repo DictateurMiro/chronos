@@ -9,7 +9,7 @@ import psutil
 import math
 
 
-e
+
 chronos = """
 
  .d8888b.  888                                                 
