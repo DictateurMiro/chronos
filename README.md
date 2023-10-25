@@ -18,6 +18,7 @@
 ✔ Fastest
 ✔ Clean code
 ✔ Beautiful HTML & Console
+✔ Progression bar
 ```
 
 ---
